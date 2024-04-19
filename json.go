@@ -18,3 +18,20 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.WriteHeader(code)
 	w.Write(dat)
 }
+
+func respondWithError(w http.ResponseWriter, code int, msg string) {
+	if code > 499 {
+		log.Println("500 level error: ", msg)
+	}
+
+	// the json tags basically tells the json marshal/unmarshal what we want
+	// json object something like
+	// { "error": "something went wrong" }
+	type errResponse struct {
+		Error string `json:"error"`
+	}
+
+	respondWithJSON(w, code, errResponse{
+		Error: msg,
+	})
+}
