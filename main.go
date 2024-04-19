@@ -40,7 +40,7 @@ func main() {
 	//something like localhost:8000/v1/healthz
 	//the Get method only allows Get requests
 	Router1.Get("/healthz", handlerReadiness)
-	Router1.Get("error", handlerError)
+	Router1.Get("/error", handlerError)
 
 	router.Mount("/v1", Router1)
 
