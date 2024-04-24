@@ -6,15 +6,24 @@ package main
 // good for a self-contaned project and includes all dependencies
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/dukebward/news_grabber/internal/database"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+
+	// underscore is to include even if not using
+	_ "github.com/lib/pq"
 )
+
+type apiConfig struct {
+	DB *database.Queries
+}
 
 func main() {
 	godotenv.Load()
@@ -22,6 +31,20 @@ func main() {
 	portString := os.Getenv("PORT")
 	if portString == "" {
 		log.Fatal("PORT is not defined in env")
+	}
+
+	dbURL := os.Getenv("DB_URL")
+	if dbURL == "" {
+		log.Fatal("DB_URL is not defined in env")
+	}
+
+	conn, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatal("Can't connect to database", err)
+	}
+
+	apiCfg := apiConfig{
+		DB: database.New(conn),
 	}
 
 	router := chi.NewRouter()
@@ -41,6 +64,7 @@ func main() {
 	//the Get method only allows Get requests
 	Router1.Get("/healthz", handlerReadiness)
 	Router1.Get("/error", handlerError)
+	Router1.Post("/users", apiCfg.handlerCreateUser)
 
 	router.Mount("/v1", Router1)
 
@@ -51,7 +75,7 @@ func main() {
 
 	// print format like C
 	log.Printf("Server starting on port %v", portString)
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
