@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/dukebward/news_grabber/internal/auth"
 	"github.com/dukebward/news_grabber/internal/database"
 	"github.com/google/uuid"
 )
@@ -36,5 +37,16 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	respondWithJSON(w, 200, databaseUserToUser(user))
+	respondWithJSON(w, 201, databaseUserToUser(user))
+}
+
+func (apiCfg *apiConfig) handlerGetUser(w http.ResponseWriter, r *http.Request) {
+	apiKey, err := auth.GetAPIKey(r.Header)
+	if err != nil {
+		respondWithError(w, 403, fmt.Sprintf("Auth error: %v", err))
+		return
+	}
+
+	// this is enabled because queries is allowed to use it
+	apiCfg.DB.GetUserByAPIKey(r.Context(), apiKey)
 }
