@@ -10,7 +10,7 @@ import (
 
 type authedHandler func(http.ResponseWriter, *http.Request, database.User)
 
-func (cfg *apiConfig) midAuth(handler authedHandler) http.HandlerFunc {
+func (apiCfg *apiConfig) midAuth(handler authedHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		apiKey, err := auth.GetAPIKey(r.Header)
 		if err != nil {
@@ -26,6 +26,6 @@ func (cfg *apiConfig) midAuth(handler authedHandler) http.HandlerFunc {
 			return
 		}
 
-		respondWithJSON(w, 200, databaseUserToUser(user))
+		handler(w, r, user)
 	}
 }
