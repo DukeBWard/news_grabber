@@ -35,6 +35,16 @@ func databaseFeedToFeed(dbFeed database.Feed) Feed {
 	}
 }
 
+func databaseFeedsToFeeds(dbFeeds []database.Feed) []Feed {
+	// slice of feed structs
+	feeds := []Feed{}
+	for _, dbFeed := range dbFeeds {
+		feeds = append(feeds, databaseFeedToFeed(dbFeed))
+	}
+
+	return feeds
+}
+
 // has the nicely formatted json tags
 func databaseUserToUser(dbUser database.User) User {
 	return User{
