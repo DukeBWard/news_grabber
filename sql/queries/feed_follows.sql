@@ -9,5 +9,5 @@ SELECT * from feed_follows WHERE user_id=$1;
 
 -- exec just runs the command, returns no records thats why its just exec
 -- $ is for params 
--- name: DeleteFeedFollows :exec
+-- name: DeleteFeedFollow :exec
 DELETE FROM feed_follows WHERE id=$1 AND user_id=$2;
