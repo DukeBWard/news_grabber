@@ -74,7 +74,7 @@ func scrapeFeed(wg *sync.WaitGroup, db *database.Queries, feed database.Feed) {
 
 		published_at, err := time.Parse(time.RFC1123Z, item.PubDate)
 		if err != nil {
-			log.Println("post date cannot be parsed: %v err: %v", item.PubDate, err)
+			log.Printf("post date cannot be parsed: %v err: %v", item.PubDate, err)
 			continue
 		}
 
