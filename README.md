@@ -1,5 +1,7 @@
 RSS News Feed
 
+Running this program will scan the internet for RSS feeds and put them all in one place.
+
 Using Goose, sqlc, Golang, Go Routines, Postgres
 
 # Helpful notes:
