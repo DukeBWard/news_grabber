@@ -64,6 +64,7 @@ func main() {
 
 	//something like localhost:8000/v1/healthz
 	//the Get method only allows Get requests
+	// anything that uses the mid auth function is an authenticated endpoint
 	Router1.Get("/healthz", handlerReadiness)
 	Router1.Get("/error", handlerError)
 	Router1.Post("/users", apiCfg.handlerCreateUser)
@@ -73,6 +74,7 @@ func main() {
 	Router1.Post("/feed_follows", apiCfg.midAuth(apiCfg.handlerCreateFeedFollow))
 	Router1.Get("/feed_follows", apiCfg.midAuth(apiCfg.handlerGetFeedFollow))
 	Router1.Delete("/feed_follows/{feedFollowID}", apiCfg.midAuth(apiCfg.handlerDeleteFeedFollow))
+	Router1.Get("/posts", apiCfg.midAuth(apiCfg.handlerGetPostsForUser))
 
 	router.Mount("/v1", Router1)
 

@@ -1,5 +1,7 @@
 RSS News Feed
 
+Using Goose, sqlc, Golang, Go Routines, Postgres
+
 # Helpful notes:
 
 * `sqlc generate` is really cool, will generate code in internal package based off of .sql files in sql directory.
